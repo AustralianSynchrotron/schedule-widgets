@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="author" content="Australian Synchrotron">
+    <meta name="description" content="Demo website for the schedule JavaScript widgets">
+    <title>Schedule widgets - demo</title>
+
+    <!-- default styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+
+    <!-- schedule widget styles-->
+    {% assets "css_scrollable" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+
+
+    <!-- default javascript libraries -->
+    <script src="{{ url_for('static', filename='libs/jquery-1.11.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/knockout-3.1.0.js') }}"></script>
+
+    <!-- schedule widgets -->
+    {% assets "js_scrollable" %}
+    <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+</head>
+<body>
+
+<h2>The row schedule widget</h2>
+{% include 'scrollable_widget.html' %}
+
+</body>
+</html>
