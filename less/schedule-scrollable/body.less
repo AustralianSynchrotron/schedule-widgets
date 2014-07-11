@@ -1,0 +1,45 @@
+.schedule-sw-body {
+  position: relative;
+  width: 100%;
+  background: @colour-background-body;
+}
+
+.schedule-sw-experiments {
+  float: left;
+  width: @schedule-experiment-width;
+  background: @colour-background-experiments;
+}
+
+.schedule-sw-experiment {
+  width: @schedule-experiment-width;
+  height: @schedule-experiment-height;
+  margin-bottom: @schedule-timeline-border;
+  background: @colour-background-experiment;
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+.schedule-sw-scroll {
+  position: relative;
+  margin-left: @schedule-experiment-width;
+  background: @colour-background-scroll;
+}
+
+.schedule-sw-scroll-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: @schedule-scroll-width;
+  background: @colour-background-scroll-field;
+}
+
+.schedule-sw-scroll-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: @schedule-scroll-width;
+  background: @colour-background-scroll-field;
+}

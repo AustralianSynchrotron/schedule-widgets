@@ -6,6 +6,10 @@ app = Flask(__name__)
 
 assets = Environment(app)
 
+# just for development on Windows
+assets.cache = False
+assets.manifest = False
+
 assets.load_path = [
     os.path.join(os.path.dirname(__file__), 'less'),
     os.path.join(os.path.dirname(__file__), 'coffee')
@@ -13,13 +17,13 @@ assets.load_path = [
 
 # JavaScript scrollable widget
 js_scrollable = Bundle('schedule-scrollable/application.coffee',
-                       filters='coffeescript,jsmin',
+                       filters='coffeescript',
                        output='js/schedule-scrollable.js')
 assets.register('js_scrollable', js_scrollable)
 
 # CSS scrollable widget
 css_scrollable = Bundle('schedule-scrollable/main.less',
-                        depends='less/schedule-scrollable/*.less',
+                        depends='schedule-scrollable/*.less',
                         filters='less',
                         output='css/schedule-scrollable.css')
 assets.register('css_scrollable', css_scrollable)

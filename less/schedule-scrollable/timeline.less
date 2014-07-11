@@ -1,0 +1,24 @@
+.schedule-sw-timelines {
+  margin-left: @schedule-scroll-width;
+  margin-right: @schedule-scroll-width;
+  background: @colour-background-timelines;
+}
+
+.schedule-sw-timeline {
+  position: relative;
+  overflow: hidden;
+  height: @schedule-experiment-height;
+  margin-bottom: @schedule-timeline-border;
+  background: @colour-background-timeline;
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+.schedule-sw-visit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-right: solid 2px #ff0000;
+  background: @colour-background-visit;
+}

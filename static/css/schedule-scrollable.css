@@ -1,1 +1,100 @@
-.schedule-sw-container{width:100%}.schedule-sw-header{height:50px;background:#a00}.schedule-sw-body{background:#00a;float:left}.schedule-sw-experiments{height:100%;width:100px;background:#0047d3}.schedule-sw-footer{height:10px;background:#0aa}
+.schedule-sw-container {
+  position: relative;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.schedule-sw-header {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  background: #aa0000;
+}
+.schedule-sw-header-menu {
+  float: left;
+  width: 100px;
+  height: 50px;
+  background: #00aa45;
+}
+.schedule-sw-header-timeline {
+  margin-left: 150px;
+  margin-right: 50px;
+  height: 50px;
+  background: #00ccaa;
+}
+.schedule-sw-body {
+  position: relative;
+  width: 100%;
+  background: #0000aa;
+}
+.schedule-sw-experiments {
+  float: left;
+  width: 100px;
+  background: #0047d3;
+}
+.schedule-sw-experiment {
+  width: 100px;
+  height: 40px;
+  margin-bottom: 4px;
+  background: #aa6400;
+}
+.schedule-sw-experiment:last-child {
+  margin-bottom: 0 !important;
+}
+.schedule-sw-scroll {
+  position: relative;
+  margin-left: 100px;
+  background: #56227d;
+}
+.schedule-sw-scroll-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  background: #56dd7d;
+}
+.schedule-sw-scroll-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  background: #56dd7d;
+}
+.schedule-sw-footer {
+  clear: both;
+  width: 100%;
+  height: 10px;
+  background: #00aaaa;
+}
+.schedule-sw-timelines {
+  margin-left: 50px;
+  margin-right: 50px;
+  background: #ac84cc;
+}
+.schedule-sw-timeline {
+  position: relative;
+  overflow: hidden;
+  height: 40px;
+  margin-bottom: 4px;
+  background: #ff84cc;
+}
+.schedule-sw-timeline:last-child {
+  margin-bottom: 0 !important;
+}
+.schedule-sw-visit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-right: solid 2px #ff0000;
+  background: #ffff00;
+}
+.schedule-sw-time-marker {
+  position: absolute;
+  width: 2px;
+  margin-left: 100px;
+  bottom: 10px;
+  top: 0;
+  background: #000000;
+}
