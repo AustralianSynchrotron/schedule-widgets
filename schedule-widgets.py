@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template
 from flask.ext.assets import Environment, Bundle
 
@@ -5,16 +6,22 @@ app = Flask(__name__)
 
 assets = Environment(app)
 
+assets.load_path = [
+    os.path.join(os.path.dirname(__file__), 'less'),
+    os.path.join(os.path.dirname(__file__), 'coffee')
+]
+
 # JavaScript scrollable widget
-js_scrollable = Bundle('widgets/js/schedule-scrollable/application.js',
-                       filters='jsmin',
-                       output='widgets/js/schedule-scrollable.js')
+js_scrollable = Bundle('schedule-scrollable/application.coffee',
+                       filters='coffeescript,jsmin',
+                       output='js/schedule-scrollable.js')
 assets.register('js_scrollable', js_scrollable)
 
 # CSS scrollable widget
-css_scrollable = Bundle('widgets/css/schedule-scrollable/main.less',
+css_scrollable = Bundle('schedule-scrollable/main.less',
+                        depends='less/schedule-scrollable/*.less',
                         filters='less',
-                        output='widgets/css/schedule-scrollable.css')
+                        output='css/schedule-scrollable.css')
 assets.register('css_scrollable', css_scrollable)
 
 
