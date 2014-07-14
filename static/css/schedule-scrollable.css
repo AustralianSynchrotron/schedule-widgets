@@ -17,8 +17,8 @@
   background: #00aa45;
 }
 .schedule-sw-header-timeline {
-  margin-left: 150px;
-  margin-right: 50px;
+  margin-left: 100px;
+  margin-right: 10px;
   height: 50px;
   background: #00ccaa;
 }
@@ -46,20 +46,12 @@
   margin-left: 100px;
   background: #56227d;
 }
-.schedule-sw-scroll-left {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 50px;
-  background: #56dd7d;
-}
-.schedule-sw-scroll-right {
+.schedule-sw-scroll-border-right {
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
-  width: 50px;
+  width: 10px;
   background: #56dd7d;
 }
 .schedule-sw-footer {
@@ -69,8 +61,7 @@
   background: #00aaaa;
 }
 .schedule-sw-timelines {
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-right: 10px;
   background: #ac84cc;
 }
 .schedule-sw-timeline {
