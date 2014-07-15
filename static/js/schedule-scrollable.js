@@ -18,7 +18,6 @@ ko.bindingHandlers.timeMarkerPosition = {
     return setInterval(function() {
       var current_time;
       current_time = moment().unix() - bindingContext.$root.startDateUnix();
-      console.log(current_time);
       return $(element).css({
         left: current_time * bindingContext.$root.pxSecScale()
       });
@@ -30,6 +29,33 @@ ko.bindingHandlers.timeMarkerPosition = {
     return $(element).css({
       left: current_time * bindingContext.$root.pxSecScale()
     });
+  }
+};
+
+ko.bindingHandlers.scrollSource = {
+  init: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
+    var x;
+    x = 0;
+    return interact(element).draggable({
+      onmove: function(event) {
+        var currPos, currWidth;
+        currPos = $(element).position().left + event.dx;
+        currWidth = $(element).width();
+        if (currPos < 20 && currPos + currWidth > $(element.parentNode).width() - 20) {
+          x += event.dx;
+          return bindingContext.$root.scrollOffset(x);
+        }
+      }
+    }).inertia(true).restrict({
+      drag: element.parentNode,
+      endOnly: false
+    });
+  }
+};
+
+ko.bindingHandlers.scrollTarget = {
+  update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
+    return element.style.webkitTransform = element.style.transform = "translate(" + (bindingContext.$root.scrollOffset()) + "px, 0)";
   }
 };
 
@@ -112,6 +138,7 @@ ScheduleScrollableViewModel = (function() {
     this.startDate = ko.observable(moment(startDate));
     this.endDate = ko.observable(moment(endDate));
     this.pxSecScale = ko.observable(0.01);
+    this.scrollOffset = ko.observable(0.0);
     this.startDateUnix = ko.computed((function(_this) {
       return function() {
         return _this.startDate().unix();

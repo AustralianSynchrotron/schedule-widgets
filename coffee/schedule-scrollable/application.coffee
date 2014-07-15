@@ -43,6 +43,7 @@ class ScheduleScrollableViewModel
     @startDate = ko.observable(moment(startDate))
     @endDate = ko.observable(moment(endDate))
     @pxSecScale = ko.observable(0.01)
+    @scrollOffset = ko.observable(0.0)
 
     # computed data
     @startDateUnix = ko.computed => @startDate().unix()

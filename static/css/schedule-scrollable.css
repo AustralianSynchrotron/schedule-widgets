@@ -41,24 +41,28 @@
 .schedule-sw-experiment:last-child {
   margin-bottom: 0 !important;
 }
-.schedule-sw-scroll {
+.schedule-sw-footer {
+  clear: both;
+  width: 100%;
+  height: 10px;
+  background: #00aaaa;
+}
+.schedule-sw-timeline-body {
   position: relative;
+  overflow: hidden;
   margin-left: 100px;
   background: #56227d;
 }
-.schedule-sw-scroll-border-right {
+.schedule-sw-scroll {
+  position: relative;
+}
+.schedule-sw-timeline-border-right {
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
   width: 10px;
   background: #56dd7d;
-}
-.schedule-sw-footer {
-  clear: both;
-  width: 100%;
-  height: 10px;
-  background: #00aaaa;
 }
 .schedule-sw-timelines {
   margin-right: 10px;
