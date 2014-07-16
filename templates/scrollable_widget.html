@@ -2,7 +2,11 @@
 <div class="schedule-sw-container">
     <div class="schedule-sw-header">
         <div class="schedule-sw-header-menu" data-bind="click: test"></div>
-        <div class="schedule-sw-header-timeline"></div>
+        <div class="schedule-sw-header-timeline">
+            <div class="schedule-sw-header-dates" data-bind="scrollTarget"></div>
+            <div class="schedule-sw-header-scale" data-bind="scrollTarget"></div>
+            <div class="schedule-sw-header-times" data-bind="scrollTarget"></div>
+        </div>
     </div>
     <div class="schedule-sw-body">
         <div class="schedule-sw-experiments" data-bind="foreach: experiments">

@@ -17,10 +17,23 @@
   background: #00aa45;
 }
 .schedule-sw-header-timeline {
+  overflow: hidden;
   margin-left: 100px;
   margin-right: 10px;
   height: 50px;
   background: #00ccaa;
+}
+.schedule-sw-header-dates {
+  height: 40%;
+  background: #3487aa;
+}
+.schedule-sw-header-scale {
+  height: 20%;
+  background: #ac58fa;
+}
+.schedule-sw-header-times {
+  height: 40%;
+  background: #3487aa;
 }
 .schedule-sw-body {
   position: relative;
