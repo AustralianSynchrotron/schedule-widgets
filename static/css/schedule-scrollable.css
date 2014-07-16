@@ -18,6 +18,7 @@
 }
 .schedule-sw-header-timeline {
   overflow: hidden;
+  position: relative;
   margin-left: 100px;
   margin-right: 10px;
   height: 50px;
@@ -63,6 +64,7 @@
 .schedule-sw-timeline-body {
   position: relative;
   overflow: hidden;
+  max-width: 10000px;
   margin-left: 100px;
   background: #56227d;
 }
@@ -101,8 +103,7 @@
 .schedule-sw-time-marker {
   position: absolute;
   width: 2px;
-  margin-left: 100px;
-  bottom: 10px;
+  bottom: 0;
   top: 0;
   background: #000000;
 }

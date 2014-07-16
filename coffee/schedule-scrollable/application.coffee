@@ -16,24 +16,18 @@ class ScheduleScrollableExperimentModel
     @id = ko.observable(data.id)
     @shortname = ko.observable(data.shortname)
     @longname = ko.observable(data.longname)
-    @startDate = ko.observable(startDate)
-    @endDate = ko.observable(endDate)
 
     # computed data
-    @startDateIso = ko.computed => @startDate().toISOString()
-    @endDateIso = ko.computed => @endDate().toISOString()
-    @startDateUnix = ko.computed => @startDate().unix()
-    @endDateUnix = ko.computed => @endDate().unix()
     @visits = ko.observableArray([]);
 
     # operations
-    @loadVisits()
+    @loadVisits(startDate, endDate)
 
     @id.subscribe = (newValue) =>
       console.log(newValue)
 
-  loadVisits: =>
-    $.getJSON "/api/visits?expId=#{@id()}&startDate=#{@startDateIso()}&endDate=#{@endDateIso()}", (data) =>
+  loadVisits: (startDate, endDate) =>
+    $.getJSON "/api/visits?expId=#{@id()}&startDate=#{startDate.toISOString()}&endDate=#{endDate.toISOString()}", (data) =>
       @visits($.map data.visits, (item) => new ScheduleScrollableVisitModel(item))
 
 
@@ -42,19 +36,37 @@ class ScheduleScrollableViewModel
     # data
     @startDate = ko.observable(moment(startDate))
     @endDate = ko.observable(moment(endDate))
-    @pxSecScale = ko.observable(0.01)
-    @scrollOffset = ko.observable(0.0)
+    @visibleStartDate = ko.observable(@startDate())
+    @secPxScale = ko.observable(0.01) # seconds to pixel conversion factor
 
     # computed data
     @startDateUnix = ko.computed => @startDate().unix()
     @endDateUnix = ko.computed => @endDate().unix()
+    @visibleStartDateUnix = ko.computed => @visibleStartDate().unix()
     @experiments = ko.observableArray([]);
 
     # operations
     @loadExperiments()
 
+    # subscriptions
+    @startDate.subscribe = (newValue) =>
+      @updateVisits()
+
+    @endDate.subscribe = (newValue) =>
+      @updateVisits()
+
   test: =>
-    @pxSecScale(@pxSecScale()*5.0)
+    @secPxScale(@secPxScale()*5.0)
+
+  scrollToToday: (width) =>
+    @visibleStartDate(moment().subtract('s', 0.5 * width / @secPxScale()))
+
+  scrollToTomorrow: (width) =>
+    @visibleStartDate(moment().add('d', 1).subtract('s', 0.5 * width / @secPxScale()))
+
+  updateVisits: =>
+    ko.utils.arrayForEach @experiments() (exp) =>
+        exp.loadVisits @startDate() @endDate()
 
   loadExperiments: =>
     $.getJSON "/api/experiments", (data) =>
@@ -65,8 +77,8 @@ class ScheduleScrollableViewModel
 
 $ ->
   scheduleScrollableViewModel = new ScheduleScrollableViewModel(
-    moment().subtract('h', 2).toISOString(),
-    moment().add('d', 1).toISOString()
+    moment().subtract('d', 2).toISOString(),
+    moment().add('d', 4).toISOString()
   )
 
   scheduleScrollableViewModel.loadExperiments()
