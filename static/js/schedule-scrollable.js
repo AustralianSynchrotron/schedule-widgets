@@ -74,18 +74,8 @@ ko.bindingHandlers.scrollSource = {
     bindingContext.$root.scrollToToday($(element.parentNode).width());
     return interact(element).draggable({
       onmove: function(event) {
-        var currPos, currWidth;
-        currPos = $(element).position().left + event.dx;
-        currWidth = $(element).width();
-        if (currPos < 20 && currPos + currWidth > $(element.parentNode).width() - 20) {
-          return bindingContext.$root.visibleStartDate(bindingContext.$root.visibleStartDate().subtract('s', event.dx / bindingContext.$root.secPxScale()));
-        } else {
-          if (currPos >= 20) {
-            return bindingContext.$root.addPastVisits();
-          } else {
-            return bindingContext.$root.addFutureVisits();
-          }
-        }
+        bindingContext.$root.visibleStartDate(bindingContext.$root.visibleStartDate().subtract('s', event.dx / bindingContext.$root.secPxScale()));
+        return bindingContext.$root.visibleEndDate(bindingContext.$root.visibleEndDate().subtract('s', event.dx / bindingContext.$root.secPxScale()));
       }
     }).restrict({
       drag: element.parentNode,
@@ -130,17 +120,18 @@ ScheduleScrollableVisitModel = (function() {
 })();
 
 ScheduleScrollableExperimentModel = (function() {
-  function ScheduleScrollableExperimentModel(data, startDate, endDate) {
+  function ScheduleScrollableExperimentModel(data) {
     this.loadVisits = __bind(this.loadVisits, this);
     this.id = ko.observable(data.id);
     this.shortname = ko.observable(data.shortname);
     this.longname = ko.observable(data.longname);
     this.loadingVisits = ko.observable(false);
     this.visits = ko.observableArray([]);
-    this.loadVisits(startDate, endDate);
   }
 
   ScheduleScrollableExperimentModel.prototype.loadVisits = function(startDate, endDate) {
+    console.log(startDate.toISOString());
+    console.log(endDate.toISOString());
     if (!this.loadingVisits()) {
       this.loadingVisits(true);
       return $.getJSON("/api/visits?expId=" + (this.id()) + "&startDate=" + (startDate.toISOString()) + "&endDate=" + (endDate.toISOString()), (function(_this) {
@@ -159,17 +150,20 @@ ScheduleScrollableExperimentModel = (function() {
 })();
 
 ScheduleScrollableViewModel = (function() {
-  function ScheduleScrollableViewModel(startDate, endDate) {
+  function ScheduleScrollableViewModel() {
     this.loadExperiments = __bind(this.loadExperiments, this);
     this.updateHeaderTimes = __bind(this.updateHeaderTimes, this);
     this.updateVisits = __bind(this.updateVisits, this);
-    this.addFutureVisits = __bind(this.addFutureVisits, this);
-    this.addPastVisits = __bind(this.addPastVisits, this);
     this.scrollToTomorrow = __bind(this.scrollToTomorrow, this);
     this.scrollToToday = __bind(this.scrollToToday, this);
-    this.startDate = ko.observable(moment(startDate));
-    this.endDate = ko.observable(moment(endDate));
+    this.visibleDateRange = __bind(this.visibleDateRange, this);
+    this.dateRange = __bind(this.dateRange, this);
+    this.bufferFactor = 3;
+    this.extendDays = 2;
+    this.startDate = ko.observable(moment());
+    this.endDate = ko.observable(moment());
     this.visibleStartDate = ko.observable(this.startDate());
+    this.visibleEndDate = ko.observable(this.endDate());
     this.secPxScale = ko.observable(0.01);
     this.startDateUnix = ko.computed((function(_this) {
       return function() {
@@ -186,38 +180,91 @@ ScheduleScrollableViewModel = (function() {
         return _this.visibleStartDate().unix();
       };
     })(this));
+    this.visibleEndDateUnix = ko.computed((function(_this) {
+      return function() {
+        return _this.visibleEndDate().unix();
+      };
+    })(this));
     this.experiments = ko.observableArray([]);
     this.headerTimes = ko.observableArray([]);
-    this.loadExperiments();
-    this.updateHeaderTimes();
     this.startDate.subscribe((function(_this) {
       return function() {
-        _this.updateVisits();
-        return _this.updateHeaderTimes();
+        var diff;
+        diff = _this.dateRange() - (_this.bufferFactor * _this.visibleDateRange());
+        if (diff > 0) {
+          return _this.endDate(_this.endDate().subtract('d', diff));
+        } else {
+          _this.updateVisits();
+          return _this.updateHeaderTimes();
+        }
       };
     })(this));
     this.endDate.subscribe((function(_this) {
       return function() {
-        _this.updateVisits();
-        return _this.updateHeaderTimes();
+        var diff;
+        diff = _this.dateRange() - (_this.bufferFactor * _this.visibleDateRange());
+        if (diff > 0) {
+          return _this.startDate(_this.startDate().add('d', diff));
+        } else {
+          _this.updateVisits();
+          return _this.updateHeaderTimes();
+        }
+      };
+    })(this));
+    this.visibleStartDate.subscribe((function(_this) {
+      return function() {
+        var daysToExtend;
+        if (_this.startDate() >= _this.visibleStartDate()) {
+          daysToExtend = Math.ceil((_this.startDate().diff(_this.visibleStartDate(), 'days') + 1) / _this.extendDays) * _this.extendDays;
+          return _this.startDate(_this.startDate().subtract('d', daysToExtend));
+        }
+      };
+    })(this));
+    this.visibleEndDate.subscribe((function(_this) {
+      return function() {
+        var daysToExtend;
+        if (_this.endDate() <= _this.visibleEndDate()) {
+          daysToExtend = Math.ceil((_this.visibleEndDate().diff(_this.endDate(), 'days') + 1) / _this.extendDays) * _this.extendDays;
+          return _this.endDate(_this.endDate().add('d', daysToExtend));
+        }
       };
     })(this));
   }
 
+  ScheduleScrollableViewModel.prototype.dateRange = function(unit) {
+    var result;
+    if (unit == null) {
+      unit = 'days';
+    }
+    result = this.endDate().diff(this.startDate(), unit);
+    if (result === 0) {
+      return 1;
+    } else {
+      return result;
+    }
+  };
+
+  ScheduleScrollableViewModel.prototype.visibleDateRange = function(unit) {
+    var result;
+    if (unit == null) {
+      unit = 'days';
+    }
+    result = this.visibleEndDate().diff(this.visibleStartDate(), unit);
+    if (result === 0) {
+      return 1;
+    } else {
+      return result;
+    }
+  };
+
   ScheduleScrollableViewModel.prototype.scrollToToday = function(width) {
-    return this.visibleStartDate(moment().subtract('s', 0.5 * width / this.secPxScale()));
+    this.visibleStartDate(moment().subtract('s', 0.5 * width / this.secPxScale()));
+    return this.visibleEndDate(moment().add('s', 0.5 * width / this.secPxScale()));
   };
 
   ScheduleScrollableViewModel.prototype.scrollToTomorrow = function(width) {
-    return this.visibleStartDate(moment().add('d', 1).subtract('s', 0.5 * width / this.secPxScale()));
-  };
-
-  ScheduleScrollableViewModel.prototype.addPastVisits = function() {
-    return this.startDate(this.startDate().subtract('d', 1));
-  };
-
-  ScheduleScrollableViewModel.prototype.addFutureVisits = function() {
-    return this.endDate(this.endDate().add('d', 1));
+    this.visibleStartDate(moment().add('d', 1).subtract('s', 0.5 * width / this.secPxScale()));
+    return this.visibleEndDate(moment().add('d', 1).add('s', 0.5 * width / this.secPxScale()));
   };
 
   ScheduleScrollableViewModel.prototype.updateVisits = function() {
@@ -248,9 +295,10 @@ ScheduleScrollableViewModel = (function() {
   ScheduleScrollableViewModel.prototype.loadExperiments = function() {
     return $.getJSON("/api/experiments", (function(_this) {
       return function(data) {
-        return _this.experiments($.map(data.experiments, function(item) {
-          return new ScheduleScrollableExperimentModel(item, _this.startDate(), _this.endDate());
+        _this.experiments($.map(data.experiments, function(item) {
+          return new ScheduleScrollableExperimentModel(item);
         }));
+        return _this.updateVisits();
       };
     })(this));
   };
@@ -261,7 +309,7 @@ ScheduleScrollableViewModel = (function() {
 
 $(function() {
   var scheduleScrollableViewModel;
-  scheduleScrollableViewModel = new ScheduleScrollableViewModel(moment().subtract('d', 2).toISOString(), moment().add('d', 4).toISOString());
-  scheduleScrollableViewModel.loadExperiments();
-  return ko.applyBindings(scheduleScrollableViewModel);
+  scheduleScrollableViewModel = new ScheduleScrollableViewModel();
+  ko.applyBindings(scheduleScrollableViewModel);
+  return scheduleScrollableViewModel.loadExperiments();
 });

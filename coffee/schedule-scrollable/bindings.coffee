@@ -27,22 +27,15 @@ ko.bindingHandlers.headerTimePosition = {
 
 ko.bindingHandlers.scrollSource = {
   init: (element, valueAccessor, bindingHandlers, viewModel, bindingContext) ->
-    # centre current date
+    # centre around current date
     bindingContext.$root.scrollToToday($(element.parentNode).width())
 
     # attach the draggable callback
     interact element
     .draggable {
         onmove: (event) ->
-          currPos = $(element).position().left + event.dx
-          currWidth = $(element).width()
-          if currPos < 20 and currPos+currWidth > $(element.parentNode).width() - 20
-            bindingContext.$root.visibleStartDate(bindingContext.$root.visibleStartDate().subtract('s', event.dx / bindingContext.$root.secPxScale()))
-          else
-            if currPos >= 20
-              bindingContext.$root.addPastVisits()
-            else
-              bindingContext.$root.addFutureVisits()
+          bindingContext.$root.visibleStartDate(bindingContext.$root.visibleStartDate().subtract('s', event.dx / bindingContext.$root.secPxScale()))
+          bindingContext.$root.visibleEndDate(bindingContext.$root.visibleEndDate().subtract('s', event.dx / bindingContext.$root.secPxScale()))
     }
     #.inertia true
     .restrict {
