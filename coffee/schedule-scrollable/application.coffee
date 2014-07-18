@@ -22,8 +22,6 @@ class ScheduleScrollableExperimentModel
     @visits = ko.observableArray([]);
 
   loadVisits: (startDate, endDate) =>
-    console.log(startDate.toISOString())
-    console.log(endDate.toISOString())
     if !@loadingVisits()
       @loadingVisits(true)
       $.getJSON "/api/visits?expId=#{@id()}&startDate=#{startDate.toISOString()}&endDate=#{endDate.toISOString()}", (data) =>
@@ -80,12 +78,10 @@ class ScheduleScrollableViewModel
         @endDate(@endDate().add('d', daysToExtend))
 
   dateRange: (unit='days') =>
-    result = @endDate().diff(@startDate(), unit)
-    if result == 0 then 1 else result
+    @endDate().diff(@startDate(), unit)
 
   visibleDateRange: (unit='days') =>
-    result = @visibleEndDate().diff(@visibleStartDate(), unit)
-    if result == 0 then 1 else result
+    @visibleEndDate().diff(@visibleStartDate(), unit)+1
 
   scrollToToday: (width) =>
     @visibleStartDate(moment().subtract('s', 0.5 * width / @secPxScale()))

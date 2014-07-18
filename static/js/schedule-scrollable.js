@@ -130,8 +130,6 @@ ScheduleScrollableExperimentModel = (function() {
   }
 
   ScheduleScrollableExperimentModel.prototype.loadVisits = function(startDate, endDate) {
-    console.log(startDate.toISOString());
-    console.log(endDate.toISOString());
     if (!this.loadingVisits()) {
       this.loadingVisits(true);
       return $.getJSON("/api/visits?expId=" + (this.id()) + "&startDate=" + (startDate.toISOString()) + "&endDate=" + (endDate.toISOString()), (function(_this) {
@@ -232,29 +230,17 @@ ScheduleScrollableViewModel = (function() {
   }
 
   ScheduleScrollableViewModel.prototype.dateRange = function(unit) {
-    var result;
     if (unit == null) {
       unit = 'days';
     }
-    result = this.endDate().diff(this.startDate(), unit);
-    if (result === 0) {
-      return 1;
-    } else {
-      return result;
-    }
+    return this.endDate().diff(this.startDate(), unit);
   };
 
   ScheduleScrollableViewModel.prototype.visibleDateRange = function(unit) {
-    var result;
     if (unit == null) {
       unit = 'days';
     }
-    result = this.visibleEndDate().diff(this.visibleStartDate(), unit);
-    if (result === 0) {
-      return 1;
-    } else {
-      return result;
-    }
+    return this.visibleEndDate().diff(this.visibleStartDate(), unit) + 1;
   };
 
   ScheduleScrollableViewModel.prototype.scrollToToday = function(width) {
