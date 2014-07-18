@@ -18,17 +18,18 @@ class ScheduleScrollableExperimentModel
     @longname = ko.observable(data.longname)
 
     # computed data
+    @loadingVisits = ko.observable(false)
     @visits = ko.observableArray([]);
 
     # operations
     @loadVisits(startDate, endDate)
 
-    @id.subscribe = (newValue) =>
-      console.log(newValue)
-
   loadVisits: (startDate, endDate) =>
-    $.getJSON "/api/visits?expId=#{@id()}&startDate=#{startDate.toISOString()}&endDate=#{endDate.toISOString()}", (data) =>
-      @visits($.map data.visits, (item) => new ScheduleScrollableVisitModel(item))
+    if !@loadingVisits()
+      @loadingVisits(true)
+      $.getJSON "/api/visits?expId=#{@id()}&startDate=#{startDate.toISOString()}&endDate=#{endDate.toISOString()}", (data) =>
+        @visits($.map data.visits, (item) => new ScheduleScrollableVisitModel(item))
+        @loadingVisits(false)
 
 
 class ScheduleScrollableViewModel
@@ -44,19 +45,20 @@ class ScheduleScrollableViewModel
     @endDateUnix = ko.computed => @endDate().unix()
     @visibleStartDateUnix = ko.computed => @visibleStartDate().unix()
     @experiments = ko.observableArray([]);
+    @headerTimes = ko.observableArray([]);
 
     # operations
     @loadExperiments()
+    @updateHeaderTimes()
 
     # subscriptions
-    @startDate.subscribe = (newValue) =>
+    @startDate.subscribe =>
       @updateVisits()
+      @updateHeaderTimes()
 
-    @endDate.subscribe = (newValue) =>
+    @endDate.subscribe =>
       @updateVisits()
-
-  test: =>
-    @secPxScale(@secPxScale()*5.0)
+      @updateHeaderTimes()
 
   scrollToToday: (width) =>
     @visibleStartDate(moment().subtract('s', 0.5 * width / @secPxScale()))
@@ -64,15 +66,26 @@ class ScheduleScrollableViewModel
   scrollToTomorrow: (width) =>
     @visibleStartDate(moment().add('d', 1).subtract('s', 0.5 * width / @secPxScale()))
 
+  addPastVisits: =>
+    @startDate(@startDate().subtract('d', 1))
+
+  addFutureVisits: =>
+    @endDate(@endDate().add('d', 1))
+
   updateVisits: =>
-    ko.utils.arrayForEach @experiments() (exp) =>
-        exp.loadVisits @startDate() @endDate()
+    exp.loadVisits(@startDate(), @endDate()) for exp in @experiments()
+
+  updateHeaderTimes: =>
+    # split date range into 4 hour blocks
+    blockStart = moment(@startDate()).millisecond(0).second(0).minute(0).hour(Math.ceil(@startDate().hour() / 4) * 4)
+    @headerTimes.removeAll() # TODO: clever update instead of remove All
+    while blockStart < @endDate()
+      @headerTimes.push({'headerDate': moment(blockStart)})
+      blockStart.add('h', 4)
 
   loadExperiments: =>
     $.getJSON "/api/experiments", (data) =>
       @experiments($.map data.experiments, (item) => new ScheduleScrollableExperimentModel(item, @startDate(), @endDate()))
-
-
 
 
 $ ->

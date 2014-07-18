@@ -16,7 +16,7 @@
   height: 50px;
   background: #00aa45;
 }
-.schedule-sw-header-timeline {
+.schedule-sw-header-timeline-body {
   overflow: hidden;
   position: relative;
   margin-left: 100px;
@@ -24,17 +24,42 @@
   height: 50px;
   background: #00ccaa;
 }
-.schedule-sw-header-dates {
-  height: 40%;
-  background: #3487aa;
+.schedule-sw-header-timline-horzline {
+  margin-top: 25px;
+  background: #0000ff;
+  height: 1px;
 }
-.schedule-sw-header-scale {
-  height: 20%;
-  background: #ac58fa;
+.schedule-sw-header-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.schedule-sw-header-times-item {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 50px;
+  display: inline;
+  border-left: 1px solid #ff0000;
+}
+.schedule-sw-header-dates {
+  position: absolute;
+  top: 0;
+  margin-left: -10px;
+  padding-top: 2px;
+  padding-bottom: 1px;
+  width: 20px;
+  background: #00ccaa;
+  font-size: 14px;
 }
 .schedule-sw-header-times {
-  height: 40%;
-  background: #3487aa;
+  position: absolute;
+  bottom: 0;
+  margin-left: -10px;
+  padding-top: 1px;
+  padding-bottom: 2px;
+  background: #00ccaa;
+  font-size: 12px;
 }
 .schedule-sw-body {
   position: relative;
@@ -64,7 +89,6 @@
 .schedule-sw-timeline-body {
   position: relative;
   overflow: hidden;
-  max-width: 10000px;
   margin-left: 100px;
   background: #56227d;
 }

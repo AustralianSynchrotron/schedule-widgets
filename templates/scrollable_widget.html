@@ -1,11 +1,18 @@
 
 <div class="schedule-sw-container">
     <div class="schedule-sw-header">
-        <div class="schedule-sw-header-menu" data-bind="click: test"></div>
-        <div class="schedule-sw-header-timeline">
-            <div class="schedule-sw-header-dates" data-bind="scrollTarget, scrollWidth"></div>
-            <div class="schedule-sw-header-scale" data-bind="scrollTarget, scrollWidth"></div>
-            <div class="schedule-sw-header-times" data-bind="scrollTarget, scrollWidth"></div>
+        <div class="schedule-sw-header-menu"></div>
+        <div class="schedule-sw-header-timeline-body">
+            <div data-bind="scrollTarget, scrollWidth">
+                <ul class="schedule-sw-header-list" data-bind="foreach: headerTimes">
+                    <li class="schedule-sw-header-times-item" data-bind="headerTimePosition">
+                        <span class="schedule-sw-header-dates" data-bind="date: headerDate, format: 'DD/MM/YYYY', visible: headerDate.hours()==0"></span>
+                        <span class="schedule-sw-header-dates" data-bind="hidden: headerDate.hours()==0">&nbsp;</span>
+                        <span class="schedule-sw-header-times" data-bind="date: headerDate, format: 'hh:mm&nbsp;A'"></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="schedule-sw-header-timline-horzline"></div>
             <div class="schedule-sw-time-marker" data-bind="timeMarkerPosition, scrollTarget"></div>
         </div>
     </div>

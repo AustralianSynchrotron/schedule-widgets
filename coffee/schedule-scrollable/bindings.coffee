@@ -19,6 +19,12 @@ ko.bindingHandlers.timeMarkerPosition = {
     $(element).css({left: current_time * bindingContext.$root.secPxScale()})
 }
 
+ko.bindingHandlers.headerTimePosition = {
+  update: (element, valueAccessor, bindingHandlers, viewModel, bindingContext) ->
+    startDate = bindingContext.$data.headerDate.unix() - bindingContext.$root.startDateUnix()
+    $(element).css({left: startDate * bindingContext.$root.secPxScale()})
+}
+
 ko.bindingHandlers.scrollSource = {
   init: (element, valueAccessor, bindingHandlers, viewModel, bindingContext) ->
     # centre current date
@@ -32,13 +38,13 @@ ko.bindingHandlers.scrollSource = {
           currWidth = $(element).width()
           if currPos < 20 and currPos+currWidth > $(element.parentNode).width() - 20
             bindingContext.$root.visibleStartDate(bindingContext.$root.visibleStartDate().subtract('s', event.dx / bindingContext.$root.secPxScale()))
-          #else
-          #  if currPos >= 20
-          #    bindingContext.$root.startDate(bindingContext.$root.startDate().subtract('d', 2))
-          #  else
-          #    bindingContext.$root.startDate(bindingContext.$root.startDate().add('d', 2))
+          else
+            if currPos >= 20
+              bindingContext.$root.addPastVisits()
+            else
+              bindingContext.$root.addFutureVisits()
     }
-    .inertia true
+    #.inertia true
     .restrict {
         drag: element.parentNode,
         endOnly: false
