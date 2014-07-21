@@ -96,7 +96,7 @@ class ScheduleScrollableViewModel
     @visibleEndDate(moment().add('d', 1).add('s', 0.5 * width / @secPxScale()))
 
   zoom: (delta) =>
-    if @secPxScale()+delta > 1e-6
+    if @secPxScale()+delta > 1.0e-6
       @secPxScale(@secPxScale()+delta)
 
   zoomWheel: (data, event) =>

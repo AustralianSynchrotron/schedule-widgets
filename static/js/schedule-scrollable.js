@@ -275,7 +275,7 @@ ScheduleScrollableViewModel = (function() {
   };
 
   ScheduleScrollableViewModel.prototype.zoom = function(delta) {
-    if (this.secPxScale() + delta > 1e-6) {
+    if (this.secPxScale() + delta > 1.0e-6) {
       return this.secPxScale(this.secPxScale() + delta);
     }
   };

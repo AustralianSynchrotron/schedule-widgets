@@ -1,3 +1,22 @@
+.schedule-sw-experiments {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: @schedule-experiment-width;
+  .drop-shadow (4px, 0px, 3px, 0, 0.25);
+  background: @colour-background-experiments;
+}
+
+.schedule-sw-experiment {
+  width: @schedule-experiment-width;
+  height: @schedule-experiment-height;
+  margin-bottom: @schedule-timeline-border;
+  background: @colour-background-experiment;
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
 .schedule-sw-timeline-body{
   position: relative;
   overflow: hidden;
@@ -15,6 +34,7 @@
   top: 0;
   bottom: 0;
   width: @schedule-scroll-border-width;
+  .drop-shadow (-4px, 0px, 3px, 0, 0.25);
   background: @colour-background-scroll-border;
 }
 
@@ -36,8 +56,9 @@
 
 .schedule-sw-visit {
   position: absolute;
+  .box-sizing;
   top: 0;
   bottom: 0;
-  border-right: solid 2px #ff0000;
+  .inner-shadow (1px, 0, 0, 0, @colour-background-visit-border);
   background: @colour-background-visit;
 }

@@ -1,0 +1,14 @@
+{
+    "experiments": [
+        {
+            "id": 1234,
+            "shortname": "AB1",
+            "longname": "Awesome Beamline 1"
+        },
+        {
+            "id": 4321,
+            "shortname": "AB2",
+            "longname": "Awesome Beamline 2"
+        }
+    ]
+}

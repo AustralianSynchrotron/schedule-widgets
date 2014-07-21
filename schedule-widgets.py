@@ -1,6 +1,9 @@
+import json
 import os
 import datetime
-from flask import Flask, render_template, jsonify, request
+import dateutil.parser
+from pytz import timezone
+from flask import Flask, render_template, jsonify, request, url_for
 from flask.ext.assets import Environment, Bundle
 
 app = Flask(__name__)
@@ -43,61 +46,39 @@ def index():
 #-------------------------------------------
 @app.route('/api/experiments')
 def experiments():
-    return jsonify({
-        'experiments': [
-            {
-                'id': 1234,
-                'shortname': "AB1",
-                'longname': "Awesome Beamline 1"
-            },
-            {
-                'id': 4321,
-                'shortname': "AB2",
-                'longname': "Awesome Beamline 2"
-            }
-        ]
-    })
+    return jsonify(json.load(open(os.path.join(
+        os.path.dirname(__file__), "static", "data", "experiments.json"))))
 
 
 @app.route('/api/visits')
 def visits():
-    exp_id = int(request.args.get('expId', 1234))
-    start_date = request.args.get('startDate',
-                                  datetime.datetime.today().isoformat())
-    end_date = request.args.get('endDate',
-                                (datetime.date.today() +
-                                datetime.timedelta(days=1)).isoformat())
+    melbourne = timezone('Australia/Melbourne')
 
-    if exp_id == 1234:
-        return jsonify({
-            'visits': [
-                {
-                    'id': 800,
-                    'startDate': datetime.datetime.today().isoformat(),
-                    'endDate': (datetime.datetime.today() +
-                                datetime.timedelta(hours=4)).isoformat()
-                },
-                {
-                    'id': 801,
-                    'startDate': (datetime.datetime.today() +
-                                  datetime.timedelta(hours=5)).isoformat(),
-                    'endDate': (datetime.datetime.today() +
-                                datetime.timedelta(hours=9)).isoformat()
-                }
-            ]
-        })
-    else:
-        return jsonify({
-            'visits': [
-                {
-                    'id': 900,
-                    'startDate': (datetime.datetime.today() +
-                                  datetime.timedelta(hours=-1)).isoformat(),
-                    'endDate': (datetime.datetime.today() +
-                                datetime.timedelta(hours=3)).isoformat()
-                }
-            ]
-        })
+    exp_id = int(request.args.get('expId', 1234))
+    start_date = dateutil.parser.parse(
+        request.args.get('startDate', datetime.datetime.today().isoformat()))
+    end_date = dateutil.parser.parse(
+        request.args.get('endDate',
+                         (datetime.date.today() +
+                          datetime.timedelta(days=1)).isoformat()))
+
+    today = datetime.datetime.combine(datetime.date.today(), datetime.time(8))
+    visits_json = json.load(open(os.path.join(
+        os.path.dirname(__file__), "static", "data", "visits_%i.json" % exp_id))
+    )
+
+    result = {'visits': []}
+    for visit in visits_json['visits']:
+        visit_start = melbourne.localize(today + datetime.timedelta(hours=visit['start']))
+        visit_end = melbourne.localize(today + datetime.timedelta(hours=visit['end']))
+
+        if visit_end >= start_date and visit_start <= end_date:
+            result['visits'].append({
+                'id': visit['id'],
+                'startDate': visit_start.isoformat(),
+                'endDate': visit_end.isoformat()
+            })
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(port=7654, debug=True)
