@@ -1,5 +1,4 @@
 
-
 class ScheduleScrollableVisitModel
   constructor: (data) ->
     # data
@@ -77,6 +76,11 @@ class ScheduleScrollableViewModel
         daysToExtend = Math.ceil((@visibleEndDate().diff(@endDate(), 'days')+1) / @extendDays) * @extendDays
         @endDate(@endDate().add('d', daysToExtend))
 
+    @secPxScale.subscribeChanged (newValue, oldValue) =>
+      diffDateRange = ((oldValue-newValue)/newValue) * @visibleDateRange('s')
+      @visibleStartDate(@visibleStartDate().subtract('s', 0.5 * diffDateRange))
+      @visibleEndDate(@visibleEndDate().add('s', 0.5 * diffDateRange))
+
   dateRange: (unit='days') =>
     @endDate().diff(@startDate(), unit)
 
@@ -90,6 +94,15 @@ class ScheduleScrollableViewModel
   scrollToTomorrow: (width) =>
     @visibleStartDate(moment().add('d', 1).subtract('s', 0.5 * width / @secPxScale()))
     @visibleEndDate(moment().add('d', 1).add('s', 0.5 * width / @secPxScale()))
+
+  zoom: (delta) =>
+    if @secPxScale()+delta > 1e-6
+      @secPxScale(@secPxScale()+delta)
+
+  zoomWheel: (data, event) =>
+    e = event.originalEvent
+    delta = Math.max(-1, Math.min(1, (e.wheelDelta or -e.detail)))
+    @zoom(delta*0.001)
 
   updateVisits: =>
     exp.loadVisits(@startDate(), @endDate()) for exp in @experiments()
@@ -109,6 +122,7 @@ class ScheduleScrollableViewModel
 
 
 $ ->
+  ko.validation.init()
   scheduleScrollableViewModel = new ScheduleScrollableViewModel()
   ko.applyBindings(scheduleScrollableViewModel)
   scheduleScrollableViewModel.loadExperiments()

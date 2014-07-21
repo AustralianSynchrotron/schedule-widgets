@@ -21,7 +21,7 @@
             <div class="schedule-sw-experiment" data-bind="text: shortname"></div>
         </div>
         <div class="schedule-sw-timeline-body">
-            <div class="schedule-sw-scroll" data-bind="scrollSource, scrollTarget, scrollWidth">
+            <div class="schedule-sw-scroll" data-bind="scrollSource, scrollTarget, scrollWidth, event: { mousewheel: zoomWheel, DOMMouseScroll: zoomWheel }">
                 <div class="schedule-sw-timelines" data-bind="foreach: experiments">
                     <div class="schedule-sw-timeline" data-bind="foreach: visits">
                         <div class="schedule-sw-visit" data-bind="visitPosition"></div>

@@ -1,6 +1,17 @@
 var ScheduleScrollableExperimentModel, ScheduleScrollableViewModel, ScheduleScrollableVisitModel,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
+ko.subscribable.fn.subscribeChanged = function(callback) {
+  var oldValue;
+  oldValue = void 0;
+  this.subscribe((function(_oldValue) {
+    return oldValue = _oldValue;
+  }), this, "beforeChange");
+  return this.subscribe(function(newValue) {
+    return callback(newValue, oldValue);
+  });
+};
+
 ko.bindingHandlers.hidden = {
   update: function(element, valueAccessor) {
     var valueUnwrapped;
@@ -152,6 +163,8 @@ ScheduleScrollableViewModel = (function() {
     this.loadExperiments = __bind(this.loadExperiments, this);
     this.updateHeaderTimes = __bind(this.updateHeaderTimes, this);
     this.updateVisits = __bind(this.updateVisits, this);
+    this.zoomWheel = __bind(this.zoomWheel, this);
+    this.zoom = __bind(this.zoom, this);
     this.scrollToTomorrow = __bind(this.scrollToTomorrow, this);
     this.scrollToToday = __bind(this.scrollToToday, this);
     this.visibleDateRange = __bind(this.visibleDateRange, this);
@@ -227,6 +240,14 @@ ScheduleScrollableViewModel = (function() {
         }
       };
     })(this));
+    this.secPxScale.subscribeChanged((function(_this) {
+      return function(newValue, oldValue) {
+        var diffDateRange;
+        diffDateRange = ((oldValue - newValue) / newValue) * _this.visibleDateRange('s');
+        _this.visibleStartDate(_this.visibleStartDate().subtract('s', 0.5 * diffDateRange));
+        return _this.visibleEndDate(_this.visibleEndDate().add('s', 0.5 * diffDateRange));
+      };
+    })(this));
   }
 
   ScheduleScrollableViewModel.prototype.dateRange = function(unit) {
@@ -251,6 +272,19 @@ ScheduleScrollableViewModel = (function() {
   ScheduleScrollableViewModel.prototype.scrollToTomorrow = function(width) {
     this.visibleStartDate(moment().add('d', 1).subtract('s', 0.5 * width / this.secPxScale()));
     return this.visibleEndDate(moment().add('d', 1).add('s', 0.5 * width / this.secPxScale()));
+  };
+
+  ScheduleScrollableViewModel.prototype.zoom = function(delta) {
+    if (this.secPxScale() + delta > 1e-6) {
+      return this.secPxScale(this.secPxScale() + delta);
+    }
+  };
+
+  ScheduleScrollableViewModel.prototype.zoomWheel = function(data, event) {
+    var delta, e;
+    e = event.originalEvent;
+    delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
+    return this.zoom(delta * 0.001);
   };
 
   ScheduleScrollableViewModel.prototype.updateVisits = function() {
@@ -295,6 +329,7 @@ ScheduleScrollableViewModel = (function() {
 
 $(function() {
   var scheduleScrollableViewModel;
+  ko.validation.init();
   scheduleScrollableViewModel = new ScheduleScrollableViewModel();
   ko.applyBindings(scheduleScrollableViewModel);
   return scheduleScrollableViewModel.loadExperiments();

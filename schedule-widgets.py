@@ -17,7 +17,8 @@ assets.load_path = [
 ]
 
 # JavaScript scrollable widget
-js_scrollable = Bundle('common_bindings.coffee',
+js_scrollable = Bundle('common.coffee',
+                       'common_bindings.coffee',
                        'schedule-scrollable/bindings.coffee',
                        'schedule-scrollable/application.coffee',
                        filters='coffeescript',
