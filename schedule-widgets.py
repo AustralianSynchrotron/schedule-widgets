@@ -28,12 +28,27 @@ js_scrollable = Bundle('common.coffee',
                        output='js/schedule-scrollable.js')
 assets.register('js_scrollable', js_scrollable)
 
+# JavaScript block widget
+js_block = Bundle('common.coffee',
+                  'common_bindings.coffee',
+                  'schedule-block/bindings.coffee',
+                  'schedule-block/application.coffee',
+                  filters='coffeescript',
+                  output='js/schedule-block.js')
+assets.register('js_block', js_block)
+
 # CSS scrollable widget
 css_scrollable = Bundle('schedule-scrollable/main.less',
                         depends='schedule-scrollable/*.less',
                         filters='less',
                         output='css/schedule-scrollable.css')
 assets.register('css_scrollable', css_scrollable)
+
+css_block = Bundle('schedule-block/main.less',
+                    depends='schedule-block/*.less',
+                    filters='less',
+                    output='css/schedule-block.css')
+assets.register('css_block', css_block)
 
 
 @app.route('/')
@@ -81,4 +96,4 @@ def visits():
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(port=7654, debug=True)
+    app.run(host="0.0.0.0", port=7654, debug=True)

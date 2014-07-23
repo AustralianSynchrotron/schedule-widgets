@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
 
+    {% assets "css_block" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
 
     <!-- default javascript libraries -->
     <script src="{{ url_for('static', filename='libs/jquery-1.11.1.min.js') }}"></script>
@@ -26,10 +29,17 @@
     {% assets "js_scrollable" %}
     <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
+
+    {% assets "js_block" %}
+    <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 </head>
 <body>
 
-<h2>The row schedule widget</h2>
+<h2>The block schedule widget</h2>
+{% include 'block_widget.html' %}
+
+<h2>The scrollable schedule widget</h2>
 {% include 'scrollable_widget.html' %}
 
 </body>
