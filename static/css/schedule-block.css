@@ -21,6 +21,25 @@
   height: 50px;
   background: #d300ff;
 }
+.schedule-bl-calendar-weekdays-spacer {
+  position: relative;
+  float: left;
+  height: 100%;
+  width: 50px;
+  background: #ffe16d;
+}
+.schedule-bl-calendar-weekdays-days {
+  position: relative;
+  margin-left: 50px;
+  margin-right: 10px;
+  height: 100%;
+  background: #7ab4ff;
+}
+.schedule-bl-calendar-weekdays-day {
+  position: relative;
+  float: left;
+  text-align: center;
+}
 .schedule-bl-calendar-row {
   position: relative;
 }
@@ -50,6 +69,11 @@
   position: relative;
   height: 50%;
   background: #ff6c8e;
+}
+.schedule-bl-calendar-row-header-day {
+  position: relative;
+  float: left;
+  text-align: center;
 }
 .schedule-bl-calendar-experiments {
   margin-right: 10px;
@@ -83,7 +107,7 @@
   height: 10px;
   background: #ff00c5;
 }
-.schedule-bl-allocations {
+.schedule-bl-toolbox {
   position: absolute;
   top: 0;
   bottom: 0;

@@ -46,6 +46,7 @@ class ScheduleScrollableViewModel
     @endDateUnix = ko.computed => @endDate().unix()
     @visibleStartDateUnix = ko.computed => @visibleStartDate().unix()
     @visibleEndDateUnix = ko.computed => @visibleEndDate().unix()
+
     @experiments = ko.observableArray([]);
     @headerTimes = ko.observableArray([]);
 
@@ -124,5 +125,5 @@ class ScheduleScrollableViewModel
 $ ->
   ko.validation.init()
   scheduleScrollableViewModel = new ScheduleScrollableViewModel()
-  ko.applyBindings(scheduleScrollableViewModel)
+  ko.applyBindings(scheduleScrollableViewModel, $('#schedule-scrollable-widget').get(0))
   scheduleScrollableViewModel.loadExperiments()

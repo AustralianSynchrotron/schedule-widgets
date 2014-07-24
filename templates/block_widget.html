@@ -1,15 +1,23 @@
-<div class="schedule-bl">
-    <div class="schedule-bl-allocations"></div>
+<div id="schedule-block-widget" class="schedule-bl">
+    <div class="schedule-bl-toolbox">Toolbox</div>
     <div class="schedule-bl-calendar">
         <div class="schedule-bl-calendar-header"></div>
-        <div class="schedule-bl-calendar-weekdays"></div>
-        <div class="schedule-bl-calendar-rows">
+        <div class="schedule-bl-calendar-weekdays">
+            <div class="schedule-bl-calendar-weekdays-spacer"></div>
+            <div class="schedule-bl-calendar-weekdays-days" data-bind="foreach: weekDayNames">
+                <div class="schedule-bl-calendar-weekdays-day" data-bind="text: weekDayName, dayWidth"></div>
+            </div>
+            <div class="schedule-bl-calendar-row-border"></div>
+        </div>
+        <div class="schedule-bl-calendar-rows" data-bind="foreach: rows">
             <div class="schedule-bl-calendar-row">
                 <div class="schedule-bl-calendar-row-header">
                     <div class="schedule-bl-calendar-row-header-spacer"></div>
                     <div class="schedule-bl-calendar-row-header-content">
                         <div class="schedule-bl-calendar-row-header-months"></div>
-                        <div class="schedule-bl-calendar-row-header-days"></div>
+                        <div class="schedule-bl-calendar-row-header-days" data-bind="foreach: days">
+                            <div class="schedule-bl-calendar-row-header-day" data-bind="date: day, format: 'DD', dayWidth"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="schedule-bl-calendar-experiments">

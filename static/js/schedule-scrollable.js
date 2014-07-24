@@ -331,6 +331,6 @@ $(function() {
   var scheduleScrollableViewModel;
   ko.validation.init();
   scheduleScrollableViewModel = new ScheduleScrollableViewModel();
-  ko.applyBindings(scheduleScrollableViewModel);
+  ko.applyBindings(scheduleScrollableViewModel, $('#schedule-scrollable-widget').get(0));
   return scheduleScrollableViewModel.loadExperiments();
 });
