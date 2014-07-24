@@ -1,34 +1,93 @@
-.schedule-bl-container {
+.schedule-bl {
   position: relative;
   width: 80%;
   margin-left: auto;
   margin-right: auto;
 }
-.schedule-bl-allocations-container {
-  position: relative;
-  float: left;
-  width: 300px;
-  height: 200px;
-  background: #ff6c00;
+.schedule-bl-footer {
+  clear: both;
 }
-.schedule-bl-calendar-container {
+.schedule-bl-calendar {
   position: relative;
   margin-left: 300px;
   background: #00ff66;
 }
 .schedule-bl-calendar-header {
+  height: 50px;
+  background: #0078ff;
+}
+.schedule-bl-calendar-weekdays {
   position: relative;
   height: 50px;
   background: #d300ff;
 }
+.schedule-bl-calendar-row {
+  position: relative;
+}
+.schedule-bl-calendar-row-header {
+  position: relative;
+  height: 50px;
+  margin-right: 10px;
+}
+.schedule-bl-calendar-row-header-spacer {
+  position: relative;
+  float: left;
+  height: 100%;
+  width: 50px;
+  background: #02e9ff;
+}
+.schedule-bl-calendar-row-header-content {
+  position: relative;
+  margin-left: 50px;
+  height: 100%;
+}
+.schedule-bl-calendar-row-header-months {
+  position: relative;
+  height: 50%;
+  background: #f386ff;
+}
+.schedule-bl-calendar-row-header-days {
+  position: relative;
+  height: 50%;
+  background: #ff6c8e;
+}
+.schedule-bl-calendar-experiments {
+  margin-right: 10px;
+}
+.schedule-bl-calendar-experiment {
+  position: relative;
+  height: 50px;
+}
+.schedule-bl-calendar-experiment-label {
+  position: relative;
+  float: left;
+  height: 100%;
+  width: 50px;
+  background: #b5ff80;
+}
+.schedule-bl-calendar-experiment-timeline {
+  position: relative;
+  margin-left: 50px;
+  height: 100%;
+  background: #e3ff60;
+}
+.schedule-bl-calendar-row-border {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  background: #a4baff;
+}
 .schedule-bl-calendar-footer {
-  height: 20px;
+  height: 10px;
   background: #ff00c5;
 }
-.schedule-bl-footer {
-  clear: both;
-}
-.schedule-bl-toolbar {
-  height: 50px;
-  background: #0078ff;
+.schedule-bl-allocations {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  float: left;
+  width: 300px;
+  background: #ff6c00;
 }
