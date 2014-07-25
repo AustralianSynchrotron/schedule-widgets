@@ -3,7 +3,7 @@
     <div class="schedule-bl-calendar">
         <div class="schedule-bl-calendar-header"></div>
         <div class="schedule-bl-calendar-weekdays">
-            <div class="schedule-bl-calendar-weekdays-spacer" data-bind="click: appendWeek"></div>
+            <div class="schedule-bl-calendar-weekdays-spacer" data-bind="click: prependWeek"></div>
             <div class="schedule-bl-calendar-weekdays-days" data-bind="foreach: weekDayNames">
                 <div class="schedule-bl-calendar-weekdays-day" data-bind="text: weekDayName, blDayWidth"></div>
             </div>
@@ -38,7 +38,10 @@
                 <div class="schedule-bl-calendar-row-border"></div>
             </div>
         </div>
-        <div class="schedule-bl-calendar-footer"></div>
+        <div class="schedule-bl-calendar-footer">
+            <div class="schedule-bl-calendar-footer-spacer" data-bind="click: appendWeek"></div>
+            <div class="schedule-bl-calendar-footer-content"></div>
+        </div>
     </div>
     <div class="schedule-bl-footer"></div>
 </div>

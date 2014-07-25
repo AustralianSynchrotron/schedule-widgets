@@ -45,8 +45,8 @@ class ScheduleBlockViewModel
     @experiments = ko.observableArray([])
 
     # computed data
-    @visibleStartDate = ko.computed => @startDate().day(1)
-    @visibleEndDate = ko.computed => @endDate().day(7)
+    @visibleStartDate = ko.computed => moment(@startDate()).day(1)
+    @visibleEndDate = ko.computed => moment(@endDate()).day(7)
     @numberWeeks = ko.computed => @visibleEndDate().diff(@visibleStartDate(),'w')+1
     @weekDayNames = ko.computed =>
       dayNames = []
@@ -67,10 +67,10 @@ class ScheduleBlockViewModel
       @rowsArray()
 
   prependWeek: =>
-    @startDate(@startDate().subtract('w',1))
+    @startDate(@startDate().subtract('w', 1))
 
   appendWeek: =>
-    @endDate(@endDate().add('w',1))
+    @endDate(@endDate().add('w', 1))
 
   updateVisits: =>
     exp.loadVisits(@visibleStartDate(), @visibleEndDate()) for exp in @experiments()

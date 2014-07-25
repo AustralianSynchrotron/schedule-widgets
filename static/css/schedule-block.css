@@ -133,6 +133,18 @@
   height: 20px;
   background: #ff00c5;
 }
+.schedule-bl-calendar-footer-spacer {
+  position: relative;
+  float: left;
+  height: 100%;
+  width: 50px;
+  background: #c6b6ff;
+}
+.schedule-bl-calendar-footer-content {
+  margin-left: 50px;
+  height: 100%;
+  background: #b8dcff;
+}
 .schedule-bl-toolbox {
   position: absolute;
   top: 0;

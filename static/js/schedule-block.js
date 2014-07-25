@@ -226,12 +226,12 @@ ScheduleBlockViewModel = (function() {
     this.experiments = ko.observableArray([]);
     this.visibleStartDate = ko.computed((function(_this) {
       return function() {
-        return _this.startDate().day(1);
+        return moment(_this.startDate()).day(1);
       };
     })(this));
     this.visibleEndDate = ko.computed((function(_this) {
       return function() {
-        return _this.endDate().day(7);
+        return moment(_this.endDate()).day(7);
       };
     })(this));
     this.numberWeeks = ko.computed((function(_this) {
