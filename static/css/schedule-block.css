@@ -96,9 +96,22 @@
 }
 .schedule-bl-calendar-experiment-timeline {
   position: relative;
+  overflow: hidden;
   margin-left: 50px;
   height: 100%;
   background: #e3ff60;
+}
+.schedule-bl-calendar-visit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: inset 1px 0 0 0 #fafafa;
+  -moz-box-shadow: inset 1px 0 0 0 #fafafa;
+  box-shadow: inset 1px 0 0 0 #fafafa;
+  background: #448fba;
 }
 .schedule-bl-calendar-row-border {
   position: absolute;

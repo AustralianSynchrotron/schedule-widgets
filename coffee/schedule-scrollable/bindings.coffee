@@ -1,5 +1,5 @@
 
-ko.bindingHandlers.visitPosition = {
+ko.bindingHandlers.swVisitPosition = {
   update: (element, valueAccessor, bindingHandlers, viewModel, bindingContext) ->
     startDate = bindingContext.$data.startDateUnix() - bindingContext.$root.startDateUnix()
     duration = bindingContext.$data.endDateUnix() - bindingContext.$data.startDateUnix()
@@ -7,7 +7,7 @@ ko.bindingHandlers.visitPosition = {
     $(element).width(duration * bindingContext.$root.secPxScale())
 }
 
-ko.bindingHandlers.timeMarkerPosition = {
+ko.bindingHandlers.swTimeMarkerPosition = {
   init: (element, valueAccessor, bindingHandlers, viewModel, bindingContext) ->
     setInterval ->
       current_time = moment().unix() - bindingContext.$root.startDateUnix()
@@ -19,13 +19,13 @@ ko.bindingHandlers.timeMarkerPosition = {
     $(element).css({left: current_time * bindingContext.$root.secPxScale()})
 }
 
-ko.bindingHandlers.headerTimePosition = {
+ko.bindingHandlers.swHeaderTimePosition = {
   update: (element, valueAccessor, bindingHandlers, viewModel, bindingContext) ->
     startDate = bindingContext.$data.headerDate.unix() - bindingContext.$root.startDateUnix()
     $(element).css({left: startDate * bindingContext.$root.secPxScale()})
 }
 
-ko.bindingHandlers.scrollSource = {
+ko.bindingHandlers.swScrollSource = {
   init: (element, valueAccessor, bindingHandlers, viewModel, bindingContext) ->
     # centre around current date
     bindingContext.$root.scrollToToday($(element.parentNode).width())
@@ -44,14 +44,14 @@ ko.bindingHandlers.scrollSource = {
     }
 }
 
-ko.bindingHandlers.scrollTarget = {
+ko.bindingHandlers.swScrollTarget = {
   update: (element, valueAccessor, bindingHandlers, viewModel, bindingContext) ->
     offset = (bindingContext.$root.startDateUnix() - bindingContext.$root.visibleStartDateUnix()) * bindingContext.$root.secPxScale()
     element.style.webkitTransform =
     element.style.transform = "translate(#{offset}px, 0)"
 }
 
-ko.bindingHandlers.scrollWidth = {
+ko.bindingHandlers.swScrollWidth = {
   update: (element, valueAccessor, bindingHandlers, viewModel, bindingContext) ->
     $(element).width((bindingContext.$root.endDateUnix()-bindingContext.$root.startDateUnix()) * bindingContext.$root.secPxScale())
 }

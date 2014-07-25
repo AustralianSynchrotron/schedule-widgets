@@ -35,7 +35,6 @@ class ScheduleBlockRowModel
         localStartDate.add('d', 1)
       monthMoments
 
-
 class ScheduleBlockViewModel
   constructor: ->
     # data

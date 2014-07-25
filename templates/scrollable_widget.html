@@ -1,9 +1,9 @@
 <div id="schedule-scrollable-widget" class="schedule-sw-container">
     <div class="schedule-sw-header">
         <div class="schedule-sw-header-timeline-body">
-            <div data-bind="scrollTarget, scrollWidth">
+            <div data-bind="swScrollTarget, swScrollWidth">
                 <ul class="schedule-sw-header-list" data-bind="foreach: headerTimes">
-                    <li class="schedule-sw-header-times-item" data-bind="headerTimePosition">
+                    <li class="schedule-sw-header-times-item" data-bind="swHeaderTimePosition">
                         <span class="schedule-sw-header-dates" data-bind="date: headerDate, format: 'DD/MM/YYYY', visible: headerDate.hours()==0"></span>
                         <span class="schedule-sw-header-dates" data-bind="hidden: headerDate.hours()==0">&nbsp;</span>
                         <span class="schedule-sw-header-times" data-bind="date: headerDate, format: 'hh:mm&nbsp;A'"></span>
@@ -11,19 +11,19 @@
                 </ul>
             </div>
             <div class="schedule-sw-header-timline-horzline"></div>
-            <div class="schedule-sw-time-marker" data-bind="timeMarkerPosition, scrollTarget"></div>
+            <div class="schedule-sw-time-marker" data-bind="swTimeMarkerPosition, swScrollTarget"></div>
         </div>
         <div class="schedule-sw-header-menu"></div>
     </div>
     <div class="schedule-sw-body">
         <div class="schedule-sw-timeline-body">
-            <div class="schedule-sw-scroll" data-bind="scrollSource, scrollTarget, scrollWidth, event: { mousewheel: zoomWheel, DOMMouseScroll: zoomWheel }">
+            <div class="schedule-sw-scroll" data-bind="swScrollSource, swScrollTarget, swScrollWidth, event: { mousewheel: zoomWheel, DOMMouseScroll: zoomWheel }">
                 <div class="schedule-sw-timelines" data-bind="foreach: experiments">
                     <div class="schedule-sw-timeline" data-bind="foreach: visits">
-                        <div class="schedule-sw-visit" data-bind="visitPosition"></div>
+                        <div class="schedule-sw-visit" data-bind="swVisitPosition"></div>
                     </div>
                 </div>
-                <div class="schedule-sw-time-marker" data-bind="timeMarkerPosition"></div>
+                <div class="schedule-sw-time-marker" data-bind="swTimeMarkerPosition"></div>
             </div>
         </div>
         <div class="schedule-sw-experiments" data-bind="foreach: experiments">

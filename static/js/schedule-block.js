@@ -36,12 +36,19 @@ ScheduleVisitModel = (function() {
 ScheduleExperimentModel = (function() {
   function ScheduleExperimentModel(data) {
     this.loadVisits = __bind(this.loadVisits, this);
+    this.visitsByDate = __bind(this.visitsByDate, this);
     this.id = ko.observable(data.id);
     this.shortname = ko.observable(data.shortname);
     this.longname = ko.observable(data.longname);
     this.loadingVisits = ko.observable(false);
     this.visits = ko.observableArray([]);
   }
+
+  ScheduleExperimentModel.prototype.visitsByDate = function(startDate, endDate) {
+    return ko.utils.arrayFilter(this.visits(), function(visit) {
+      return visit.startDate() <= endDate() && visit.endDate() >= startDate();
+    });
+  };
 
   ScheduleExperimentModel.prototype.loadVisits = function(startDate, endDate) {
     if (!this.loadingVisits()) {
@@ -88,17 +95,34 @@ ko.bindingHandlers.date = {
   }
 };
 
-ko.bindingHandlers.dayWidth = {
+ko.bindingHandlers.blDayWidth = {
   update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
     return $(element).width("" + (100.0 / (bindingContext.$root.numberWeeksPerCalendarRow() * 7)) + "%");
   }
 };
 
-ko.bindingHandlers.monthWidth = {
+ko.bindingHandlers.blMonthWidth = {
   update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
     var valueUnwrapped;
     valueUnwrapped = ko.unwrap(valueAccessor());
     return $(element).width("" + (valueUnwrapped * 100.0 / (bindingContext.$root.numberWeeksPerCalendarRow() * 7)) + "%");
+  }
+};
+
+ko.bindingHandlers.blVisitPosition = {
+  update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
+    var endOffset, rowSeconds, rowStartDate, rowStartUnix, startOffset;
+    rowStartDate = bindingHandlers().blRowStartDate || null;
+    if (rowStartDate != null) {
+      rowStartUnix = moment(rowStartDate()).startOf('day').unix();
+      rowSeconds = bindingContext.$root.numberWeeksPerCalendarRow() * 604800;
+      startOffset = bindingContext.$data.startDateUnix() - rowStartUnix;
+      endOffset = bindingContext.$data.endDateUnix() - rowStartUnix;
+      $(element).css({
+        left: "" + (100.0 * startOffset / rowSeconds) + "%"
+      });
+      return $(element).width("" + (100.0 * (endOffset - startOffset) / rowSeconds) + "%");
+    }
   }
 };
 

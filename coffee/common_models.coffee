@@ -14,10 +14,12 @@ class ScheduleExperimentModel
     @id = ko.observable(data.id)
     @shortname = ko.observable(data.shortname)
     @longname = ko.observable(data.longname)
-
-    # computed data
     @loadingVisits = ko.observable(false)
     @visits = ko.observableArray([]);
+
+  visitsByDate: (startDate, endDate) =>
+    ko.utils.arrayFilter @visits(), (visit) ->
+      return visit.startDate() <= endDate() and visit.endDate() >= startDate()
 
   loadVisits: (startDate, endDate) =>
     if !@loadingVisits()

@@ -36,12 +36,19 @@ ScheduleVisitModel = (function() {
 ScheduleExperimentModel = (function() {
   function ScheduleExperimentModel(data) {
     this.loadVisits = __bind(this.loadVisits, this);
+    this.visitsByDate = __bind(this.visitsByDate, this);
     this.id = ko.observable(data.id);
     this.shortname = ko.observable(data.shortname);
     this.longname = ko.observable(data.longname);
     this.loadingVisits = ko.observable(false);
     this.visits = ko.observableArray([]);
   }
+
+  ScheduleExperimentModel.prototype.visitsByDate = function(startDate, endDate) {
+    return ko.utils.arrayFilter(this.visits(), function(visit) {
+      return visit.startDate() <= endDate() && visit.endDate() >= startDate();
+    });
+  };
 
   ScheduleExperimentModel.prototype.loadVisits = function(startDate, endDate) {
     if (!this.loadingVisits()) {
@@ -88,7 +95,7 @@ ko.bindingHandlers.date = {
   }
 };
 
-ko.bindingHandlers.visitPosition = {
+ko.bindingHandlers.swVisitPosition = {
   update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
     var duration, startDate;
     startDate = bindingContext.$data.startDateUnix() - bindingContext.$root.startDateUnix();
@@ -100,7 +107,7 @@ ko.bindingHandlers.visitPosition = {
   }
 };
 
-ko.bindingHandlers.timeMarkerPosition = {
+ko.bindingHandlers.swTimeMarkerPosition = {
   init: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
     return setInterval(function() {
       var current_time;
@@ -119,7 +126,7 @@ ko.bindingHandlers.timeMarkerPosition = {
   }
 };
 
-ko.bindingHandlers.headerTimePosition = {
+ko.bindingHandlers.swHeaderTimePosition = {
   update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
     var startDate;
     startDate = bindingContext.$data.headerDate.unix() - bindingContext.$root.startDateUnix();
@@ -129,7 +136,7 @@ ko.bindingHandlers.headerTimePosition = {
   }
 };
 
-ko.bindingHandlers.scrollSource = {
+ko.bindingHandlers.swScrollSource = {
   init: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
     bindingContext.$root.scrollToToday($(element.parentNode).width());
     return interact(element).draggable({
@@ -144,7 +151,7 @@ ko.bindingHandlers.scrollSource = {
   }
 };
 
-ko.bindingHandlers.scrollTarget = {
+ko.bindingHandlers.swScrollTarget = {
   update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
     var offset;
     offset = (bindingContext.$root.startDateUnix() - bindingContext.$root.visibleStartDateUnix()) * bindingContext.$root.secPxScale();
@@ -152,7 +159,7 @@ ko.bindingHandlers.scrollTarget = {
   }
 };
 
-ko.bindingHandlers.scrollWidth = {
+ko.bindingHandlers.swScrollWidth = {
   update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
     return $(element).width((bindingContext.$root.endDateUnix() - bindingContext.$root.startDateUnix()) * bindingContext.$root.secPxScale());
   }

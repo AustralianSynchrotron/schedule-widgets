@@ -104,9 +104,19 @@
 
 .schedule-bl-calendar-experiment-timeline {
   position: relative;
+  overflow: hidden;
   margin-left: @calendar-experiment-label-width;
   height: 100%;
   background: @colour-calendar-experiment-timeline-background;
+}
+
+.schedule-bl-calendar-visit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  .box-sizing;
+  .inner-shadow (1px, 0, 0, 0, @colour-calendar-visit-border-background);
+  background: @colour-calendar-visit-background;
 }
 
 .schedule-bl-calendar-row-border {
