@@ -126,6 +126,45 @@ ko.bindingHandlers.blVisitPosition = {
   }
 };
 
+ko.bindingHandlers.blTimeMarkerPosition = {
+  init: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
+    return setInterval(function() {
+      var current_time, rowSeconds, rowStartDate, rowStartUnix;
+      rowStartDate = bindingHandlers().blRowStartDate || null;
+      if (rowStartDate != null) {
+        rowStartUnix = moment(rowStartDate()).startOf('day').unix();
+        rowSeconds = bindingContext.$root.numberWeeksPerCalendarRow() * 604800;
+        current_time = moment().unix() - rowStartUnix;
+        if (current_time >= 0) {
+          $(element).css({
+            left: "" + (100.0 * current_time / rowSeconds) + "%"
+          });
+          return $(element).show();
+        } else {
+          return $(element).hide();
+        }
+      }
+    }, 30000);
+  },
+  update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
+    var current_time, rowSeconds, rowStartDate, rowStartUnix;
+    rowStartDate = bindingHandlers().blRowStartDate || null;
+    if (rowStartDate != null) {
+      rowStartUnix = moment(rowStartDate()).startOf('day').unix();
+      rowSeconds = bindingContext.$root.numberWeeksPerCalendarRow() * 604800;
+      current_time = moment().unix() - rowStartUnix;
+      if (current_time >= 0) {
+        $(element).css({
+          left: "" + (100.0 * current_time / rowSeconds) + "%"
+        });
+        return $(element).show();
+      } else {
+        return $(element).hide();
+      }
+    }
+  }
+};
+
 ScheduleBlockRowModel = (function() {
   function ScheduleBlockRowModel(startDate, endDate, experiments) {
     this.startDate = ko.observable(startDate);

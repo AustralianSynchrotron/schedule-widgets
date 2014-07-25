@@ -42,6 +42,7 @@
 }
 .schedule-bl-calendar-row {
   position: relative;
+  overflow: hidden;
 }
 .schedule-bl-calendar-row-header {
   position: relative;
@@ -112,6 +113,13 @@
   -moz-box-shadow: inset 1px 0 0 0 #fafafa;
   box-shadow: inset 1px 0 0 0 #fafafa;
   background: #448fba;
+}
+.schedule-bl-calendar-time-marker {
+  position: absolute;
+  width: 2px;
+  bottom: 0;
+  top: 0;
+  background: #eda023;
 }
 .schedule-bl-calendar-row-border {
   position: absolute;

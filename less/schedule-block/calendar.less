@@ -39,6 +39,7 @@
 
 .schedule-bl-calendar-row {
   position: relative;
+  overflow: hidden;
 }
 
 .schedule-bl-calendar-row-header {
@@ -117,6 +118,14 @@
   .box-sizing;
   .inner-shadow (1px, 0, 0, 0, @colour-calendar-visit-border-background);
   background: @colour-calendar-visit-background;
+}
+
+.schedule-bl-calendar-time-marker {
+  position: absolute;
+  width: @calendar-time-marker-width;
+  bottom: 0;
+  top: 0;
+  background: @colour-calendar-time-marker-background;
 }
 
 .schedule-bl-calendar-row-border {
