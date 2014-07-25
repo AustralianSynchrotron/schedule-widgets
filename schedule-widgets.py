@@ -21,6 +21,7 @@ assets.load_path = [
 
 # JavaScript scrollable widget
 js_scrollable = Bundle('common.coffee',
+                       'common_models.coffee',
                        'common_bindings.coffee',
                        'schedule-scrollable/bindings.coffee',
                        'schedule-scrollable/application.coffee',
@@ -30,6 +31,7 @@ assets.register('js_scrollable', js_scrollable)
 
 # JavaScript block widget
 js_block = Bundle('common.coffee',
+                  'common_models.coffee',
                   'common_bindings.coffee',
                   'schedule-block/bindings.coffee',
                   'schedule-block/application.coffee',

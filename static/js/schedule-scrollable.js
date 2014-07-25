@@ -1,4 +1,4 @@
-var ScheduleScrollableExperimentModel, ScheduleScrollableViewModel, ScheduleScrollableVisitModel,
+var ScheduleExperimentModel, ScheduleScrollableViewModel, ScheduleVisitModel,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 ko.subscribable.fn.subscribeChanged = function(callback) {
@@ -11,6 +11,55 @@ ko.subscribable.fn.subscribeChanged = function(callback) {
     return callback(newValue, oldValue);
   });
 };
+
+ScheduleVisitModel = (function() {
+  function ScheduleVisitModel(data) {
+    this.id = ko.observable(data.id);
+    this.startDate = ko.observable(moment(data.startDate));
+    this.endDate = ko.observable(moment(data.endDate));
+    this.startDateUnix = ko.computed((function(_this) {
+      return function() {
+        return _this.startDate().unix();
+      };
+    })(this));
+    this.endDateUnix = ko.computed((function(_this) {
+      return function() {
+        return _this.endDate().unix();
+      };
+    })(this));
+  }
+
+  return ScheduleVisitModel;
+
+})();
+
+ScheduleExperimentModel = (function() {
+  function ScheduleExperimentModel(data) {
+    this.loadVisits = __bind(this.loadVisits, this);
+    this.id = ko.observable(data.id);
+    this.shortname = ko.observable(data.shortname);
+    this.longname = ko.observable(data.longname);
+    this.loadingVisits = ko.observable(false);
+    this.visits = ko.observableArray([]);
+  }
+
+  ScheduleExperimentModel.prototype.loadVisits = function(startDate, endDate) {
+    if (!this.loadingVisits()) {
+      this.loadingVisits(true);
+      return $.getJSON("/api/visits?expId=" + (this.id()) + "&startDate=" + (startDate.toISOString()) + "&endDate=" + (endDate.toISOString()), (function(_this) {
+        return function(data) {
+          _this.visits($.map(data.visits, function(item) {
+            return new ScheduleVisitModel(item);
+          }));
+          return _this.loadingVisits(false);
+        };
+      })(this));
+    }
+  };
+
+  return ScheduleExperimentModel;
+
+})();
 
 ko.bindingHandlers.hidden = {
   update: function(element, valueAccessor) {
@@ -108,55 +157,6 @@ ko.bindingHandlers.scrollWidth = {
     return $(element).width((bindingContext.$root.endDateUnix() - bindingContext.$root.startDateUnix()) * bindingContext.$root.secPxScale());
   }
 };
-
-ScheduleScrollableVisitModel = (function() {
-  function ScheduleScrollableVisitModel(data) {
-    this.id = ko.observable(data.id);
-    this.startDate = ko.observable(moment(data.startDate));
-    this.endDate = ko.observable(moment(data.endDate));
-    this.startDateUnix = ko.computed((function(_this) {
-      return function() {
-        return _this.startDate().unix();
-      };
-    })(this));
-    this.endDateUnix = ko.computed((function(_this) {
-      return function() {
-        return _this.endDate().unix();
-      };
-    })(this));
-  }
-
-  return ScheduleScrollableVisitModel;
-
-})();
-
-ScheduleScrollableExperimentModel = (function() {
-  function ScheduleScrollableExperimentModel(data) {
-    this.loadVisits = __bind(this.loadVisits, this);
-    this.id = ko.observable(data.id);
-    this.shortname = ko.observable(data.shortname);
-    this.longname = ko.observable(data.longname);
-    this.loadingVisits = ko.observable(false);
-    this.visits = ko.observableArray([]);
-  }
-
-  ScheduleScrollableExperimentModel.prototype.loadVisits = function(startDate, endDate) {
-    if (!this.loadingVisits()) {
-      this.loadingVisits(true);
-      return $.getJSON("/api/visits?expId=" + (this.id()) + "&startDate=" + (startDate.toISOString()) + "&endDate=" + (endDate.toISOString()), (function(_this) {
-        return function(data) {
-          _this.visits($.map(data.visits, function(item) {
-            return new ScheduleScrollableVisitModel(item);
-          }));
-          return _this.loadingVisits(false);
-        };
-      })(this));
-    }
-  };
-
-  return ScheduleScrollableExperimentModel;
-
-})();
 
 ScheduleScrollableViewModel = (function() {
   function ScheduleScrollableViewModel() {
@@ -316,7 +316,7 @@ ScheduleScrollableViewModel = (function() {
     return $.getJSON("/api/experiments", (function(_this) {
       return function(data) {
         _this.experiments($.map(data.experiments, function(item) {
-          return new ScheduleScrollableExperimentModel(item);
+          return new ScheduleExperimentModel(item);
         }));
         return _this.updateVisits();
       };

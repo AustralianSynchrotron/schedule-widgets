@@ -22,9 +22,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="schedule-bl-calendar-experiments">
+                <div class="schedule-bl-calendar-experiments" data-bind="foreach: experiments">
                     <div class="schedule-bl-calendar-experiment">
-                        <div class="schedule-bl-calendar-experiment-label"></div>
+                        <div class="schedule-bl-calendar-experiment-label" data-bind="text: shortname"></div>
                         <div class="schedule-bl-calendar-experiment-timeline"></div>
                     </div>
                 </div>

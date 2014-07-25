@@ -1,4 +1,5 @@
-var ScheduleBlockRowModel, ScheduleBlockViewModel;
+var ScheduleBlockRowModel, ScheduleBlockViewModel, ScheduleExperimentModel, ScheduleVisitModel,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 ko.subscribable.fn.subscribeChanged = function(callback) {
   var oldValue;
@@ -10,6 +11,55 @@ ko.subscribable.fn.subscribeChanged = function(callback) {
     return callback(newValue, oldValue);
   });
 };
+
+ScheduleVisitModel = (function() {
+  function ScheduleVisitModel(data) {
+    this.id = ko.observable(data.id);
+    this.startDate = ko.observable(moment(data.startDate));
+    this.endDate = ko.observable(moment(data.endDate));
+    this.startDateUnix = ko.computed((function(_this) {
+      return function() {
+        return _this.startDate().unix();
+      };
+    })(this));
+    this.endDateUnix = ko.computed((function(_this) {
+      return function() {
+        return _this.endDate().unix();
+      };
+    })(this));
+  }
+
+  return ScheduleVisitModel;
+
+})();
+
+ScheduleExperimentModel = (function() {
+  function ScheduleExperimentModel(data) {
+    this.loadVisits = __bind(this.loadVisits, this);
+    this.id = ko.observable(data.id);
+    this.shortname = ko.observable(data.shortname);
+    this.longname = ko.observable(data.longname);
+    this.loadingVisits = ko.observable(false);
+    this.visits = ko.observableArray([]);
+  }
+
+  ScheduleExperimentModel.prototype.loadVisits = function(startDate, endDate) {
+    if (!this.loadingVisits()) {
+      this.loadingVisits(true);
+      return $.getJSON("/api/visits?expId=" + (this.id()) + "&startDate=" + (startDate.toISOString()) + "&endDate=" + (endDate.toISOString()), (function(_this) {
+        return function(data) {
+          _this.visits($.map(data.visits, function(item) {
+            return new ScheduleVisitModel(item);
+          }));
+          return _this.loadingVisits(false);
+        };
+      })(this));
+    }
+  };
+
+  return ScheduleExperimentModel;
+
+})();
 
 ko.bindingHandlers.hidden = {
   update: function(element, valueAccessor) {
@@ -53,9 +103,10 @@ ko.bindingHandlers.monthWidth = {
 };
 
 ScheduleBlockRowModel = (function() {
-  function ScheduleBlockRowModel(startDate, endDate) {
+  function ScheduleBlockRowModel(startDate, endDate, experiments) {
     this.startDate = ko.observable(startDate);
     this.endDate = ko.observable(endDate);
+    this.experiments = experiments;
     this.days = ko.computed((function(_this) {
       return function() {
         var dayMoments, i, localStartDate, numberDays, _i;
@@ -101,10 +152,13 @@ ScheduleBlockRowModel = (function() {
 
 ScheduleBlockViewModel = (function() {
   function ScheduleBlockViewModel() {
+    this.loadExperiments = __bind(this.loadExperiments, this);
+    this.updateVisits = __bind(this.updateVisits, this);
     this.startDate = ko.observable(moment());
     this.endDate = ko.observable(moment().add('w', 2));
     this.numberWeeksPerCalendarRow = ko.observable(1);
     this.rowsArray = ko.observableArray([]);
+    this.experiments = ko.observableArray([]);
     this.visibleStartDate = ko.computed((function(_this) {
       return function() {
         return _this.startDate().day(1);
@@ -142,13 +196,35 @@ ScheduleBlockViewModel = (function() {
         localStartDate = moment(_this.visibleStartDate());
         _this.rowsArray.removeAll();
         for (i = _i = 0, _ref = _this.numberWeeks() - 1; _i <= _ref; i = _i += 1) {
-          _this.rowsArray.push(new ScheduleBlockRowModel(moment(localStartDate), moment(localStartDate.add('d', 7 * _this.numberWeeksPerCalendarRow()).subtract('d', 1))));
+          _this.rowsArray.push(new ScheduleBlockRowModel(moment(localStartDate), moment(localStartDate.add('d', 7 * _this.numberWeeksPerCalendarRow()).subtract('d', 1)), _this.experiments));
           localStartDate.add('d', 1);
         }
         return _this.rowsArray();
       };
     })(this));
   }
+
+  ScheduleBlockViewModel.prototype.updateVisits = function() {
+    var exp, _i, _len, _ref, _results;
+    _ref = this.experiments();
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      exp = _ref[_i];
+      _results.push(exp.loadVisits(this.visibleStartDate(), this.visibleEndDate()));
+    }
+    return _results;
+  };
+
+  ScheduleBlockViewModel.prototype.loadExperiments = function() {
+    return $.getJSON("/api/experiments", (function(_this) {
+      return function(data) {
+        _this.experiments($.map(data.experiments, function(item) {
+          return new ScheduleExperimentModel(item);
+        }));
+        return _this.updateVisits();
+      };
+    })(this));
+  };
 
   return ScheduleBlockViewModel;
 
@@ -158,5 +234,6 @@ $(function() {
   var scheduleBlockViewModel;
   ko.validation.init();
   scheduleBlockViewModel = new ScheduleBlockViewModel();
-  return ko.applyBindings(scheduleBlockViewModel, $('#schedule-block-widget').get(0));
+  ko.applyBindings(scheduleBlockViewModel, $('#schedule-block-widget').get(0));
+  return scheduleBlockViewModel.loadExperiments();
 });

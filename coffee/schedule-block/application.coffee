@@ -2,10 +2,11 @@
 
 
 class ScheduleBlockRowModel
-  constructor: (startDate, endDate) ->
+  constructor: (startDate, endDate, experiments) ->
     # data
     @startDate = ko.observable(startDate)
     @endDate = ko.observable(endDate)
+    @experiments = experiments
 
     # computed data
     @days = ko.computed =>
@@ -41,7 +42,8 @@ class ScheduleBlockViewModel
     @startDate = ko.observable(moment())
     @endDate = ko.observable(moment().add('w', 2))
     @numberWeeksPerCalendarRow = ko.observable(1)
-    @rowsArray = ko.observableArray([]);
+    @rowsArray = ko.observableArray([])
+    @experiments = ko.observableArray([])
 
     # computed data
     @visibleStartDate = ko.computed => @startDate().day(1)
@@ -57,12 +59,25 @@ class ScheduleBlockViewModel
       localStartDate = moment(@visibleStartDate())
       @rowsArray.removeAll() # TODO: clever update instead of remove All
       for i in [0..@numberWeeks()-1] by 1
-        @rowsArray.push new ScheduleBlockRowModel(moment(localStartDate), moment(localStartDate.add('d', 7*@numberWeeksPerCalendarRow()).subtract('d', 1)))
+        @rowsArray.push new ScheduleBlockRowModel(
+          moment(localStartDate),
+          moment(localStartDate.add('d', 7*@numberWeeksPerCalendarRow()).subtract('d', 1)),
+          @experiments
+        )
         localStartDate.add('d', 1)
       @rowsArray()
+
+  updateVisits: =>
+    exp.loadVisits(@visibleStartDate(), @visibleEndDate()) for exp in @experiments()
+
+  loadExperiments: =>
+    $.getJSON "/api/experiments", (data) =>
+      @experiments($.map data.experiments, (item) => new ScheduleExperimentModel(item))
+      @updateVisits()
 
 
 $ ->
   ko.validation.init()
   scheduleBlockViewModel = new ScheduleBlockViewModel()
   ko.applyBindings(scheduleBlockViewModel, $('#schedule-block-widget').get(0))
+  scheduleBlockViewModel.loadExperiments()
