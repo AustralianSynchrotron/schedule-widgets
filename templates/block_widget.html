@@ -14,7 +14,9 @@
                 <div class="schedule-bl-calendar-row-header">
                     <div class="schedule-bl-calendar-row-header-spacer"></div>
                     <div class="schedule-bl-calendar-row-header-content">
-                        <div class="schedule-bl-calendar-row-header-months"></div>
+                        <div class="schedule-bl-calendar-row-header-months" data-bind="foreach: months">
+                            <div class="schedule-bl-calendar-row-header-month" data-bind="date: month, format: 'MMMM YYYY', monthWidth: days"></div>
+                        </div>
                         <div class="schedule-bl-calendar-row-header-days" data-bind="foreach: days">
                             <div class="schedule-bl-calendar-row-header-day" data-bind="date: day, format: 'DD', dayWidth"></div>
                         </div>

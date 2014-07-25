@@ -17,6 +17,23 @@ class ScheduleBlockRowModel
         localStartDate.add('d', 1)
       dayMoments
 
+    @months = ko.computed =>
+      numberDays = @endDate().diff(@startDate(), 'd')
+      localStartDate = moment(@startDate())
+      monthMoments = []
+      lastMonth = -1
+      for i in [0..numberDays] by 1
+        if localStartDate.month() != lastMonth
+          lastMonth = localStartDate.month()
+          monthMoments.push {
+            'month': moment(localStartDate),
+            'days': 1
+          }
+        else
+          monthMoments[monthMoments.length-1]['days'] += 1
+        localStartDate.add('d', 1)
+      monthMoments
+
 
 class ScheduleBlockViewModel
   constructor: ->

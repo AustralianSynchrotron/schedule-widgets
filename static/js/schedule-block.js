@@ -44,6 +44,14 @@ ko.bindingHandlers.dayWidth = {
   }
 };
 
+ko.bindingHandlers.monthWidth = {
+  update: function(element, valueAccessor, bindingHandlers, viewModel, bindingContext) {
+    var valueUnwrapped;
+    valueUnwrapped = ko.unwrap(valueAccessor());
+    return $(element).width("" + (valueUnwrapped * 100.0 / (bindingContext.$root.numberWeeksPerCalendarRow() * 7)) + "%");
+  }
+};
+
 ScheduleBlockRowModel = (function() {
   function ScheduleBlockRowModel(startDate, endDate) {
     this.startDate = ko.observable(startDate);
@@ -61,6 +69,28 @@ ScheduleBlockRowModel = (function() {
           localStartDate.add('d', 1);
         }
         return dayMoments;
+      };
+    })(this));
+    this.months = ko.computed((function(_this) {
+      return function() {
+        var i, lastMonth, localStartDate, monthMoments, numberDays, _i;
+        numberDays = _this.endDate().diff(_this.startDate(), 'd');
+        localStartDate = moment(_this.startDate());
+        monthMoments = [];
+        lastMonth = -1;
+        for (i = _i = 0; _i <= numberDays; i = _i += 1) {
+          if (localStartDate.month() !== lastMonth) {
+            lastMonth = localStartDate.month();
+            monthMoments.push({
+              'month': moment(localStartDate),
+              'days': 1
+            });
+          } else {
+            monthMoments[monthMoments.length - 1]['days'] += 1;
+          }
+          localStartDate.add('d', 1);
+        }
+        return monthMoments;
       };
     })(this));
   }
