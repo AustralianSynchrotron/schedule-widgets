@@ -44,65 +44,65 @@
   position: relative;
   overflow: hidden;
 }
-.schedule-bl-calendar-row-header {
-  position: relative;
-  height: 50px;
-  margin-right: 10px;
-}
-.schedule-bl-calendar-row-header-spacer {
+.schedule-bl-calendar-row-labels {
   position: relative;
   float: left;
-  height: 100%;
   width: 50px;
-  background: #02e9ff;
+  background: #a59dff;
 }
-.schedule-bl-calendar-row-header-content {
+.schedule-bl-calendar-row-timelines {
   position: relative;
   margin-left: 50px;
-  height: 100%;
+  margin-right: 10px;
+  background: #ff91c2;
 }
-.schedule-bl-calendar-row-header-months {
+.schedule-bl-calendar-row-label-header {
+  position: relative;
+  height: 50px;
+  background: #02e9ff;
+}
+.schedule-bl-calendar-row-label-experiment {
+  position: relative;
+  height: 50px;
+  background: #b5ff80;
+}
+.schedule-bl-calendar-row-timeline-header {
+  height: 50px;
+}
+.schedule-bl-calendar-row-timeline-header-months {
   position: relative;
   height: 50%;
   background: #f386ff;
 }
-.schedule-bl-calendar-row-header-month {
+.schedule-bl-calendar-row-timeline-header-month {
   position: relative;
   float: left;
   text-align: left;
 }
-.schedule-bl-calendar-row-header-days {
+.schedule-bl-calendar-row-timeline-header-days {
   position: relative;
   height: 50%;
   background: #ff6c8e;
 }
-.schedule-bl-calendar-row-header-day {
+.schedule-bl-calendar-row-timeline-header-day {
   position: relative;
   float: left;
   text-align: center;
 }
-.schedule-bl-calendar-experiments {
-  margin-right: 10px;
+.schedule-bl-calendar-row-timeline-experiments {
+  background: #ffc267;
 }
-.schedule-bl-calendar-experiment {
+.schedule-bl-calendar-row-timeline-experiment {
   position: relative;
   height: 50px;
 }
-.schedule-bl-calendar-experiment-label {
-  position: relative;
-  float: left;
-  height: 100%;
-  width: 50px;
-  background: #b5ff80;
-}
-.schedule-bl-calendar-experiment-timeline {
+.schedule-bl-calendar-row-timeline-visits {
   position: relative;
   overflow: hidden;
-  margin-left: 50px;
   height: 100%;
   background: #e3ff60;
 }
-.schedule-bl-calendar-visit {
+.schedule-bl-calendar-row-timeline-visit {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -114,11 +114,11 @@
   box-shadow: inset 1px 0 0 0 #fafafa;
   background: #448fba;
 }
-.schedule-bl-calendar-time-marker {
+.schedule-bl-calendar-row-time-marker {
   position: absolute;
-  width: 2px;
-  bottom: 0;
   top: 0;
+  bottom: 0;
+  width: 2px;
   background: #eda023;
 }
 .schedule-bl-calendar-row-border {
@@ -130,7 +130,7 @@
   background: #a4baff;
 }
 .schedule-bl-calendar-footer {
-  height: 10px;
+  height: 20px;
   background: #ff00c5;
 }
 .schedule-bl-toolbox {

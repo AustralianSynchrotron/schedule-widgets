@@ -3,7 +3,7 @@
     <div class="schedule-bl-calendar">
         <div class="schedule-bl-calendar-header"></div>
         <div class="schedule-bl-calendar-weekdays">
-            <div class="schedule-bl-calendar-weekdays-spacer"></div>
+            <div class="schedule-bl-calendar-weekdays-spacer" data-bind="click: appendWeek"></div>
             <div class="schedule-bl-calendar-weekdays-days" data-bind="foreach: weekDayNames">
                 <div class="schedule-bl-calendar-weekdays-day" data-bind="text: weekDayName, blDayWidth"></div>
             </div>
@@ -11,27 +11,31 @@
         </div>
         <div class="schedule-bl-calendar-rows" data-bind="foreach: rows">
             <div class="schedule-bl-calendar-row">
-                <div class="schedule-bl-calendar-row-header">
-                    <div class="schedule-bl-calendar-row-header-spacer"></div>
-                    <div class="schedule-bl-calendar-row-header-content">
-                        <div class="schedule-bl-calendar-row-header-months" data-bind="foreach: months">
-                            <div class="schedule-bl-calendar-row-header-month" data-bind="date: month, format: 'MMMM YYYY', blMonthWidth: days"></div>
-                        </div>
-                        <div class="schedule-bl-calendar-row-header-days" data-bind="foreach: days">
-                            <div class="schedule-bl-calendar-row-header-day" data-bind="date: day, format: 'DD', blDayWidth"></div>
-                        </div>
+                <div class="schedule-bl-calendar-row-labels">
+                    <div class="schedule-bl-calendar-row-label-header"></div>
+                    <div data-bind="foreach: experiments">
+                        <div class="schedule-bl-calendar-row-label-experiment" data-bind="text: shortname"></div>
                     </div>
                 </div>
-                <div class="schedule-bl-calendar-experiments" data-bind="foreach: experiments">
-                    <div class="schedule-bl-calendar-experiment">
-                        <div class="schedule-bl-calendar-experiment-label" data-bind="text: shortname"></div>
-                        <div class="schedule-bl-calendar-experiment-timeline" data-bind="foreach: visitsByDate($parent.startDate, $parent.endDate)">
-                            <div class="schedule-bl-calendar-visit" data-bind="text: id, blVisitPosition, blRowStartDate: $parents[1].startDate"></div>
+                <div class="schedule-bl-calendar-row-timelines">
+                    <div class="schedule-bl-calendar-row-timeline-header">
+                        <div class="schedule-bl-calendar-row-timeline-header-months" data-bind="foreach: months">
+                            <div class="schedule-bl-calendar-row-timeline-header-month" data-bind="date: month, format: 'MMMM YYYY', blMonthWidth: days"></div>
+                        </div>
+                        <div class="schedule-bl-calendar-row-timeline-header-days" data-bind="foreach: days">
+                            <div class="schedule-bl-calendar-row-timeline-header-day" data-bind="date: day, format: 'DD', blDayWidth"></div>
                         </div>
                     </div>
+                    <div class="schedule-bl-calendar-row-timeline-experiments" data-bind="foreach: experiments">
+                        <div class="schedule-bl-calendar-row-timeline-experiment">
+                            <div class="schedule-bl-calendar-row-timeline-visits" data-bind="foreach: visitsByDate($parent.startDate, $parent.endDate)">
+                                <div class="schedule-bl-calendar-row-timeline-visit" data-bind="text: id, blVisitPosition, blRowStartDate: $parents[1].startDate"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="schedule-bl-calendar-row-time-marker" data-bind="blTimeMarkerPosition, blRowStartDate: startDate"></div>
                 </div>
                 <div class="schedule-bl-calendar-row-border"></div>
-                <div class="schedule-bl-calendar-time-marker" data-bind="blTimeMarkerPosition, blRowStartDate: startDate"></div>
             </div>
         </div>
         <div class="schedule-bl-calendar-footer"></div>

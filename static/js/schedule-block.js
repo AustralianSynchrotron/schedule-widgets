@@ -217,6 +217,8 @@ ScheduleBlockViewModel = (function() {
   function ScheduleBlockViewModel() {
     this.loadExperiments = __bind(this.loadExperiments, this);
     this.updateVisits = __bind(this.updateVisits, this);
+    this.appendWeek = __bind(this.appendWeek, this);
+    this.prependWeek = __bind(this.prependWeek, this);
     this.startDate = ko.observable(moment());
     this.endDate = ko.observable(moment().add('w', 2));
     this.numberWeeksPerCalendarRow = ko.observable(1);
@@ -266,6 +268,14 @@ ScheduleBlockViewModel = (function() {
       };
     })(this));
   }
+
+  ScheduleBlockViewModel.prototype.prependWeek = function() {
+    return this.startDate(this.startDate().subtract('w', 1));
+  };
+
+  ScheduleBlockViewModel.prototype.appendWeek = function() {
+    return this.endDate(this.endDate().add('w', 1));
+  };
 
   ScheduleBlockViewModel.prototype.updateVisits = function() {
     var exp, _i, _len, _ref, _results;

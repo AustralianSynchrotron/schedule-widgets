@@ -66,6 +66,12 @@ class ScheduleBlockViewModel
         localStartDate.add('d', 1)
       @rowsArray()
 
+  prependWeek: =>
+    @startDate(@startDate().subtract('w',1))
+
+  appendWeek: =>
+    @endDate(@endDate().add('w',1))
+
   updateVisits: =>
     exp.loadVisits(@visibleStartDate(), @visibleEndDate()) for exp in @experiments()
 
